@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Personal Profile</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -46,6 +49,7 @@
                 <span>Git</span>
             </div>
         </section>
+
         <section class="card">
             <h2>Hobbies</h2>
             <div class="skills">
@@ -55,23 +59,19 @@
                 <span>Hiking</span>
                 <span>walking</span>
                 <span>Biking</span>
-                
             </div>
         </section>
 
         <section class="card">
             <h2>Projects</h2>
-
             <div class="project">
                 <h3>Portfolio Website</h3>
                 <p>A responsive portfolio website showcasing my work and skills.</p>
             </div>
-
             <div class="project">
                 <h3>Task Manager App</h3>
                 <p>A productivity application for managing daily tasks efficiently.</p>
             </div>
-
             <div class="project">
                 <h3>E-Commerce Landing Page</h3>
                 <p>Modern landing page with responsive design, Layout and product showcase.</p>
@@ -79,10 +79,36 @@
         </section>
 
         <section class="card">
+            <h2>Visitor Guestbook</h2>
+            <p style="margin-bottom: 15px; font-size: 0.9rem; color: #b3b3b3;">Leave a message</p>
+            
+            <form id="guestbook-form" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                <input type="text" id="visitor-name" placeholder="Your Name" required style="padding: 10px; border-radius: 6px; border: 1px solid #444; background: #222; color: #fff; font-family: inherit;">
+                <textarea id="visitor-message" placeholder="Leave a nice message..." required style="padding: 10px; border-radius: 6px; border: 1px solid #444; background: #222; color: #fff; resize: vertical; min-height: 60px; font-family: inherit;"></textarea>
+                <button type="submit" style="padding: 10px; background: #5c6bc0; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: opacity 0.2s;">Submit</button>
+            </form>
+        </section>
+
+        <section class="card">
             <h2>Contact Information</h2>
             <p>Email: arieldavemilo4@gmail.com</p>
             <p>Phone: +639923639402</p>
             <p>Location: Tubao La Union | Philippines</p>
+            
+           <div class="social-media" style="margin-top: 20px; display: flex; gap: 15px; flex-wrap: wrap;">
+                <a href="https://www.facebook.com/arieldave.milo" target="_blank" title="Facebook" style="text-decoration: none; width: 45px; height: 45px; background: #1877f2; color: white; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.3rem; transition: transform 0.2s, opacity 0.2s;">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                
+                <a href="https://www.instagram.com/whospy.dave/" target="_blank" title="Instagram" style="text-decoration: none; width: 45px; height: 45px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.3rem; transition: transform 0.2s, opacity 0.2s;">
+                    <i class="fab fa-instagram"></i>
+                </a>
+
+                <a href="https://www.tiktok.com/@arieldavemilo" target="_blank" title="TikTok" style="text-decoration: none; width: 45px; height: 45px; background: #000000; color: white; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid #333; transition: transform 0.2s, opacity 0.2s;">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+
+            </div>
         </section>
 
     </main>
@@ -91,5 +117,30 @@
         <p>&copy; 2026 Ariel Dave. All Rights Reserved.</p>
     </footer>
 
+    <script>
+        const SUPABASE_URL = "https://lbbrcufgtkppkhhmlmyf.supabase.co"; 
+        const SUPABASE_ANON_KEY = "sb_publishable_xlfzM2YIZShCnEZrTF9sMQ_HwlitEGs";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const form = document.getElementById('guestbook-form');
+
+        // Insert fresh visitor rows into Supabase rows 
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('visitor-name').value;
+            const message = document.getElementById('visitor-message').value;
+
+            const { error } = await _supabase
+                .from('guestbook')
+                .insert([{ name, message }]);
+
+            if (!error) {
+                alert('Success: Your message has been sent to the database!');
+                form.reset();
+            } else {
+                alert('Database Error: ' + error.message);
+            }
+        });
+    </script>
 </body>
 </html>
